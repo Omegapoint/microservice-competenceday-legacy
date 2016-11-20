@@ -1,0 +1,15 @@
+server:
+  port: 8081
+
+spring:
+  thymeleaf:
+    cache: false
+
+  application:
+    name: conference # CHANGE THIS TO YOUR NAME
+
+eureka:
+  client:
+    enabled: true
+    serviceUrl:
+      defaultZone: http://127.0.0.1:8761/eureka/

@@ -5,9 +5,12 @@
         <encoder class="net.logstash.logback.encoder.LogstashEncoder" />
     </appender>
 
+    <springProperty scope="context" name="springAppName" source="spring.application.name"/>
+
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-            <pattern>%d{HH:mm:ss.SSS} [%X{X-B3-SpanId},%X{X-B3-TraceId}] [%thread] %-5level %logger{36} - %msg%n</pattern>
+            <pattern>%d{HH:mm:ss.SSS} [${springAppName:-},%X{X-B3-SpanId},%X{X-B3-TraceId}] [%thread] %-5level %logger{36} - %msg%n</pattern>
+            <pattern></pattern>
         </encoder>
     </appender>
 

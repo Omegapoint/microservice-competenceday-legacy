@@ -12,6 +12,7 @@
 
     <modules>
         <module>client</module>
+        <module>conference-service</module>
         <module>service-discovery</module>
     </modules>
 
