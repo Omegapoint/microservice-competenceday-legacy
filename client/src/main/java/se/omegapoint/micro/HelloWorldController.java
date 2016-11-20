@@ -20,8 +20,9 @@ public class HelloWorldController {
     @RequestMapping("/hello")
     public String hello() {
 
-        LOGGER.error("BEFORE FETCHING!");
-        restTemplate.getForEntity("http://localhost:8081/conferences", String.class);
+        LOGGER.error("BEFORE FETCHING FROM SD!");
+        //restTemplate.getForEntity("http://localhost:8081/conferences", String.class);
+        restTemplate.getForEntity("http://conference/conferences", String.class);
         LOGGER.error("AFTER FETCHING!");
         return "Hello World!";
     }
