@@ -39,7 +39,7 @@ sudo apt-get install -y docker-engine
 
 sudo usermod -aG docker ubuntu
 
-## !!! OBS, MODIFY IP TO RANCHER !!
+## !!! OBS, kopiera länken från rancher gui!
 sudo docker run -d --privileged -v /var/run/docker.sock:/var/run/docker.sock -v /var/lib/rancher:/var/lib/rancher rancher/agent:v1.0.2 http://172.31.37.7/v1/scripts/4337CD1AB51E685D5044:1480255200000:Py2sjAxxHLprUsNVbA7WXKpOOU
 ------------------------
 
