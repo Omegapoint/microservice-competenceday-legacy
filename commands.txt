@@ -1,5 +1,6 @@
 
-
+1. Sätt upp aws master med Rancher och Registry med följande config:
+ (ubuntu 14, välj security group)
 
 ----------   MASTER (Rancher + Registry)   -------------
 #!/bin/bash
@@ -20,13 +21,16 @@ sudo docker run -d --restart=unless-stopped -p 8080:8080 rancher/server
 sudo docker run -d -p 5000:5000 --name registry registry:2
 ------------------------
 
- * OBS!!! Lägg till porten i registration url under settings för racher
+ 2. Lägg till porten i "registration url" under settings för racher
 
+ 3. Lägg till Registry för Rancher (infrastructure -> Registries -> Add registry -> skriv in ip)
 
+ 4. Lägg till slaves (obs, ändra länken i config)
 
------------- SLAVE ------------
+------------ SLAVE (OBS, Change master ip) ------------
 #!/bin/bash
 
+MASTER_IP="172.31.37.7"
 sudo apt-get update
 sudo apt-get install -y apt-transport-https ca-certificates
 sudo apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D
@@ -35,13 +39,25 @@ echo "deb https://apt.dockerproject.org/repo ubuntu-trusty main" | sudo tee /etc
 sudo apt-get update
 sudo apt-get install -y linux-image-extra-$(uname -r) linux-image-extra-virtual
 
+sudo apt-get install -y jq
 sudo apt-get install -y docker-engine
 
 sudo usermod -aG docker ubuntu
 
-## !!! OBS, kopiera länken från rancher gui!
-sudo docker run -d --privileged -v /var/run/docker.sock:/var/run/docker.sock -v /var/lib/rancher:/var/lib/rancher rancher/agent:v1.0.2 http://172.31.37.7/v1/scripts/4337CD1AB51E685D5044:1480255200000:Py2sjAxxHLprUsNVbA7WXKpOOU
+# Register slave with rancher master
+REGISTRATION_URL=$(curl http://$MASTER_IP:8080/v1/projects/1a5/registrationtokens\?state\=active\&limit\=-1 | jq -r '.data[0].registrationUrl')
+PUBLIC_IP=$(curl http://169.254.169.254/latest/meta-data/public-ipv4)
+sudo docker run -e CATTLE_AGENT_IP="$PUBLIC_IP"  -d --privileged -v /var/run/docker.sock:/var/run/docker.sock -v /var/lib/rancher:/var/lib/rancher rancher/agent:v1.0.2 $REGISTRATION_URL
+
+# Allow insecure access to docker registry
+echo "DOCKER_OPTS=\"--insecure-registry $MASTER_IP:5000\"" | sudo tee -a /etc/default/docker
+sudo service docker restart
 ------------------------
+
+
+
+
+5.
 
 
 
