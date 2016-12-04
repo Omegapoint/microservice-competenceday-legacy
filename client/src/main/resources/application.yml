@@ -12,4 +12,4 @@ eureka:
   client:
     enabled: true
     serviceUrl:
-      defaultZone: http://127.0.0.1:8761/eureka/
+      defaultZone: http://172.31.37.43:8761/eureka/
